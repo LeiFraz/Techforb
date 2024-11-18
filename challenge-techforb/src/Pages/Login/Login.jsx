@@ -11,7 +11,7 @@ const Login = () => {
                 display: 'flex',
                 width: '100%',
                 height: '900px',
-                background: 'linear-gradient(180deg, #33A3AA 0%, #107076 100%)',
+                background: 'linear-gradient(180deg, rgba(51, 163, 170, 0.85), rgba(16, 112, 118, 0.85))',
             }}>
                 <CardLeft />
                 <CardRight />

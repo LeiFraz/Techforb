@@ -34,14 +34,14 @@ const CardLeft = () => {
                         fontWeight: '600',
                         marginBottom: '16px',
                     }}> 
-                        Iniciar sesión 
+                        Registrarse 
                     </Typography>
                     <Typography sx={{ 
                         fontFamily: 'Poppins, sans-serif',
                         fontSize: '14px',
                         fontWeight: '400',
                     }}> 
-                        Nos alegra tenerte de vuelta y estamos listos para atender tus necesidades. Inicia sesión y continúa aprovechando al máximo nuestra plataforma.
+                        Nos alegra que quieras unirte, estamos listos para atender tus necesidades. Registrate y aprovecha al máximo nuestra plataforma.
                     </Typography>
                 </Box>
                 <Box sx={{

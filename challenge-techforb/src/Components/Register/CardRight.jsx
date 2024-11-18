@@ -49,7 +49,7 @@ const CardRight = () => {
                     fontWeight: '500',
                     marginBottom: '30px'
                 }}> 
-                    Iniciar Sesión 
+                    Registrarse 
                 </Typography>
 
                 <TextField label='Email' variant='outlined' sx={{
@@ -64,11 +64,41 @@ const CardRight = () => {
                     border: '1px #DCDBDD',
                     marginBottom: '25px'
                 }} variant="outlined">
-                    <InputLabel htmlFor="outlined-adornment-password">
+                    <InputLabel htmlFor="outlined-password-1">
                         Contraseña
                     </InputLabel>
                     <OutlinedInput
-                        id="outlined-adornment-password"
+                        id="outlined-password-1"
+                        type={showPassword ? 'text' : 'password'}
+                        label="Password"
+                        endAdornment={
+                            <InputAdornment position="end">
+                                <IconButton
+                                    aria-label={
+                                        showPassword ? 'hide the password' : 'display the password'
+                                    }
+                                    onClick={handleClickShowPassword}
+                                    onMouseDown={handleMouseDownPassword}
+                                    onMouseUp={handleMouseUpPassword}
+                                    edge="end"
+                                >
+                                {showPassword ? <VisibilityOff /> : <Visibility />}
+                                </IconButton>
+                            </InputAdornment>
+                        }
+                    />
+                </FormControl>
+                <FormControl sx={{ 
+                    width: '393px', 
+                    height: '48px', 
+                    border: '1px #DCDBDD',
+                    marginBottom: '25px'
+                }} variant="outlined">
+                    <InputLabel htmlFor="outlined-password-2">
+                        Repetir Contraseña
+                    </InputLabel>
+                    <OutlinedInput
+                        id="outlined-password-2"
                         type={showPassword ? 'text' : 'password'}
                         label="Password"
                         endAdornment={
@@ -91,17 +121,10 @@ const CardRight = () => {
 
                 <Box sx={{
                     display: 'flex',
-                    justifyContent: 'space-between',
+                    justifyContent: 'center',
                     alignItems: 'center',
                     marginBottom: '20px'
                 }}>
-                    <Typography variant='p' sx={{
-                        fontFamily: 'Poppins, sans-serif',
-                        fontSize: '14px',
-                        fontWeight: '400',
-                    }}>
-                        ¿Olvidaste tu contraseña?
-                    </Typography>
                     <Button sx={{
                         width: '164px',
                         height: '48px',
@@ -115,7 +138,7 @@ const CardRight = () => {
                             textTransform: 'capitalize',
                             color: '#FFFFFF'
                         }}>
-                            Iniciar sesión
+                            Registrarse
                         </Typography>
                     </Button>
                 </Box>
