@@ -1,11 +1,55 @@
 import { Box, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
-import bandera from '../../assets/DashBoard/Bandera.png'
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { useEffect, useState } from "react";
+import servicesAxios from "../../services/axios";
+import ModalCreatePlant from '../Modal/ModalCreatePlant'
 
 const CardPlants = () => {
+
+    const [datos, setDatos] = useState('')
     
+    const [isOpen, setIsOpen] = useState(false);
+
+    const openModal = () => setIsOpen(true);
+    const closeModal = () => setIsOpen(false);
+
+    useEffect(()=> {
+
+        const obtenerPlantas = async() => {
+            try {
+                const response = await servicesAxios.plants();
+
+                setDatos(response)
+
+            } catch (error) {
+                console.error(error)
+            }
+        }
+
+        obtenerPlantas();
+    }, [])
     return (
         <>
+            <ModalCreatePlant isOpen={isOpen} onClose={closeModal} >
+            <Button onClick={closeModal} sx={{
+                    border: '1px solid #33A3AA',
+                    borderRadius: '5px',
+                    width: '100px',
+                    height: '36px',
+                    backgroundColor: '#FFFFFF',
+                    mr: '20px'
+                    }}>
+                        <Typography sx={{
+                            fontFamily: 'Poppins, sans-serif',
+                            fontSize: '14px',
+                            fontWeight: '500',
+                            color: '#33A3AA',
+                        }}>
+                            Cancelar
+                        </Typography>
+                    </Button>
+            </ModalCreatePlant>
+            
             <Box sx={{
                 width: {xs: '320px', sm: '500px' , md: '600px', lg: 'calc(1440px - 80px)'},
                 maxWidth: '1230px', //para mi pantalla
@@ -33,7 +77,7 @@ const CardPlants = () => {
                     }}>
                         Plantas
                     </Typography>
-                    <Button sx={{
+                    <Button onClick={openModal} sx={{
                         border:'1px solid #B0CAD1',
                         borderRadius: '5px',
                         width: '170px',
@@ -75,36 +119,73 @@ const CardPlants = () => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            <TableRow key={1} sx={{ 
-                                '&:last-child td, &:last-child th': { border: 0 } 
-                            }}>
-                                <TableCell component="th" scope="row">
-                                    <Box component='img' src={bandera} sx={{
-                                        width: '18px',
-                                        height: '12.38px',
-                                        mr: '10px'
-                                    }}/>
-                                    {'Argentina'}
-                                </TableCell>
-                                <TableCell sx={{fontSize: '12px', fontWeight: '400', fontFamily: 'Poppins, sans-serif', color: '#000000'}} align="right">
-                                    {'Quilmes'}
-                                </TableCell>
-                                <TableCell sx={{fontSize: '12px', fontWeight: '400', fontFamily: 'Poppins, sans-serif', color: '#000000'}} align="right">
-                                    {'300'}
-                                </TableCell>
-                                <TableCell sx={{fontSize: '12px', fontWeight: '400', fontFamily: 'Poppins, sans-serif', color: '#000000'}} align="right">
-                                    {'10'}
-                                </TableCell>
-                                <TableCell sx={{fontSize: '12px', fontWeight: '400', fontFamily: 'Poppins, sans-serif', color: '#000000'}} align="right">
-                                    {'2'}
-                                </TableCell>
-                                <TableCell sx={{fontSize: '12px', fontWeight: '400', fontFamily: 'Poppins, sans-serif', color: '#000000'}} align="right">
-                                    <MoreVertIcon sx={{
-                                        width: '12.05px',
-                                        color: '#425662'
-                                    }}/>
-                                </TableCell>
-                            </TableRow>
+                            { datos ? (
+                                 datos.map((dato, index) => (
+                                    <TableRow key={index} sx={{ 
+                                        '&:last-child td, &:last-child th': { border: 0 } 
+                                    }}>
+                                        <TableCell component="th" scope="row">
+                                            <Box component='img' src={dato.bandera} sx={{
+                                                width: '18px',
+                                                height: '12.38px',
+                                                mr: '10px'
+                                            }}/>
+                                            {dato.pais}
+                                        </TableCell>
+                                        <TableCell sx={{fontSize: '12px', fontWeight: '400', fontFamily: 'Poppins, sans-serif', color: '#000000'}} align="right">
+                                            {dato.nombre}
+                                        </TableCell>
+                                        <TableCell sx={{fontSize: '12px', fontWeight: '400', fontFamily: 'Poppins, sans-serif', color: '#000000'}} align="right">
+                                            {dato.lecturas}
+                                        </TableCell>
+                                        <TableCell sx={{fontSize: '12px', fontWeight: '400', fontFamily: 'Poppins, sans-serif', color: '#000000'}} align="right">
+                                            {dato.alertas_medias}
+                                        </TableCell>
+                                        <TableCell sx={{fontSize: '12px', fontWeight: '400', fontFamily: 'Poppins, sans-serif', color: '#000000'}} align="right">
+                                            {dato.alertas_rojas}
+                                        </TableCell>
+                                        <TableCell sx={{fontSize: '12px', fontWeight: '400', fontFamily: 'Poppins, sans-serif', color: '#000000'}} align="right">
+                                            <MoreVertIcon sx={{
+                                                width: '12.05px',
+                                                color: '#425662'
+                                            }}/>
+                                        </TableCell>
+                                    </TableRow>
+                                 ))
+                            ) : (
+                                <TableRow key={1} sx={{ 
+                                    '&:last-child td, &:last-child th': { border: 0 } 
+                                }}>
+                                    <TableCell component="th" scope="row">
+                                        <Box component='img' src={''} sx={{
+                                            width: '18px',
+                                            height: '12.38px',
+                                            mr: '10px'
+                                        }}/>
+                                        {''}
+                                    </TableCell>
+                                    <TableCell sx={{fontSize: '12px', fontWeight: '400', fontFamily: 'Poppins, sans-serif', color: '#000000'}} align="right">
+                                        {''}
+                                    </TableCell>
+                                    <TableCell sx={{fontSize: '12px', fontWeight: '400', fontFamily: 'Poppins, sans-serif', color: '#000000'}} align="right">
+                                        {''}
+                                    </TableCell>
+                                    <TableCell sx={{fontSize: '12px', fontWeight: '400', fontFamily: 'Poppins, sans-serif', color: '#000000'}} align="right">
+                                        {''}
+                                    </TableCell>
+                                    <TableCell sx={{fontSize: '12px', fontWeight: '400', fontFamily: 'Poppins, sans-serif', color: '#000000'}} align="right">
+                                        {''}
+                                    </TableCell>
+                                    <TableCell sx={{fontSize: '12px', fontWeight: '400', fontFamily: 'Poppins, sans-serif', color: '#000000'}} align="right">
+                                        <MoreVertIcon sx={{
+                                            width: '12.05px',
+                                            color: '#425662'
+                                        }}/>
+                                    </TableCell>
+                                </TableRow>
+                            )
+                                
+                            }
                         </TableBody>
                     </Table>
                 </TableContainer>

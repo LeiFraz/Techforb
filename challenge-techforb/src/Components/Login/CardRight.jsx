@@ -2,9 +2,13 @@ import { useState } from 'react';
 import { Box, Button, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField, Typography } from '@mui/material';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import servicesAxios from '../../services/axios.js';
+import { useNavigate } from 'react-router-dom'
 
 const CardRight = () => {
     const [showPassword, setShowPassword] = useState(false);
+    const [form, setForm] = useState({correo: '', contrasenia: ''})
+    const navigate = useNavigate()
 
     const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -15,6 +19,34 @@ const CardRight = () => {
     const handleMouseUpPassword = (event) => {
         event.preventDefault();
     };
+
+    const handleForm = (e) => {
+        const { name, value } = e.target;
+        setForm((input) => ({...input, [name]: value}));
+    };
+
+    const login = async() => 
+    {
+        try {
+            const response = await servicesAxios.login({
+                correo: form.correo,
+                contrasenia: form.contrasenia
+            })
+
+            if(response)
+            {
+                localStorage.setItem('token', response.token)
+                localStorage.setItem('nombre', response.data.nombre)
+                
+                console.log('Inicio de sesion exitoso')
+
+                navigate('/dashboard')
+            }
+
+        } catch (error) {
+            console.error('No se pudo iniciar sesion ', error.message)
+        }
+    }
     
     return(
         <Box sx={{
@@ -52,12 +84,12 @@ const CardRight = () => {
                     Iniciar Sesión 
                 </Typography>
 
-                <TextField label='Email' variant='outlined' sx={{
+                <TextField label='Email' variant='outlined' name="correo" value={form.correo} onChange={handleForm} sx={{
                     width: '393px',
                     height: '58px',
                     border: '1px #DCDBDD',
                     marginBottom: '15px'
-                }}/>
+                }} />
                 <FormControl sx={{ 
                     width: '393px', 
                     height: '48px', 
@@ -71,6 +103,9 @@ const CardRight = () => {
                         id="outlined-adornment-password"
                         type={showPassword ? 'text' : 'password'}
                         label="Password"
+                        name='contrasenia'
+                        value={form.contrasenia}
+                        onChange={handleForm}
                         endAdornment={
                             <InputAdornment position="end">
                                 <IconButton
@@ -102,7 +137,7 @@ const CardRight = () => {
                     }}>
                         ¿Olvidaste tu contraseña?
                     </Typography>
-                    <Button sx={{
+                    <Button onClick={login} sx={{
                         width: '164px',
                         height: '48px',
                         borderRadius: '12px',

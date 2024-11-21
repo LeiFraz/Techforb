@@ -3,9 +3,31 @@ import ok from '../../assets/DashBoard/ok.png'
 import alert from '../../assets/DashBoard/alert.png'
 import warning from '../../assets/DashBoard/warning.png'
 import cross from '../../assets/DashBoard/cross.png'
+import { useEffect, useState } from "react";
+import servicesAxios from '../../services/axios.js'
 
 const CardStatus = () => {
-    
+    const [lecturas, setLecturas] = useState('');
+    const [alertasMedias, setAlertasMedias] = useState('');
+    const [alertasRojas, setAlertasRojas] = useState('');
+    const [sensoresDeshabilitados, setSensoresDeshabilitados] = useState('');
+
+    useEffect(()=>{
+        const status = async() =>{
+            try {
+                const response = await servicesAxios.status()
+                
+                setLecturas(response[0].lecturas)
+                setAlertasMedias(response[0].alertas_medias)
+                setAlertasRojas(response[0].alertas_rojas)
+                setSensoresDeshabilitados(response[0].sensores_deshabilitados)
+            } catch (error) {
+                console.error(error)
+            }
+        }
+
+        status()
+    }, [])
     return (
         <>
             
@@ -41,7 +63,7 @@ const CardStatus = () => {
                                 fontWeight: '700',
                                 color: '#22242C'
                             }}>
-                                1.234
+                                {lecturas}
                             </Typography>
                         </Box>
                         
@@ -82,7 +104,7 @@ const CardStatus = () => {
                                 fontWeight: '700',
                                 color: '#22242C'
                             }}>
-                                1.234
+                                {alertasMedias}
                             </Typography>
                         </Box>
                         
@@ -123,7 +145,7 @@ const CardStatus = () => {
                                 fontWeight: '700',
                                 color: '#22242C'
                             }}>
-                                1.234
+                                {alertasRojas}
                             </Typography>
                         </Box>
                         
@@ -164,7 +186,7 @@ const CardStatus = () => {
                                 fontWeight: '700',
                                 color: '#22242C'
                             }}>
-                                1.234
+                                {sensoresDeshabilitados}
                             </Typography>
                         </Box>
                         

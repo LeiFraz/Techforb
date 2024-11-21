@@ -24,10 +24,7 @@ const DashBoard = () => {
                     <NavBar/>
                     <CardStatus/>
                     <CardPlants/>
-
-                    <Box>
-                        <CardConditions/>
-                    </Box>
+                    <CardConditions/>
                 </Box>
 
             </Box>

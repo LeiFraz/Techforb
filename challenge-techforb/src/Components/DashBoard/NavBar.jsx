@@ -3,16 +3,23 @@ import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import LanguageOutlinedIcon from '@mui/icons-material/LanguageOutlined';
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 
 const NavBar = () => {
     
-    const [invisible, setInvisible] = useState(false);
-    
+    const [invisible, setInvisible] = useState(true);
+    const [nombre,setNombre] = useState('')
+
     const handleInvisible = () => {
         setInvisible(!invisible);
     }
+    //useEffect, useState, llamado a axios
+    useEffect(() => {
+        const name = localStorage.getItem('nombre')
+        setNombre(name)
+        console.log(nombre)
+    },[nombre])
 
     return (
         <>
@@ -64,7 +71,7 @@ const NavBar = () => {
                         fontSize: '18px',
                         fontWeight: '600', 
                     }}>
-                        Juan Rojas
+                        {nombre}
                     </Typography>
                 </Box>
             </Box>
