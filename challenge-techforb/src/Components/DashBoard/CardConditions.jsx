@@ -43,7 +43,7 @@ const CardConditions = () => {
     return (
         <>
             <Grid2 container rowSpacing={1} columnSpacing={{xs: 1, sm: 2, md: 3}}>
-                    { conditions.length > 0 ? (
+                    {conditions && conditions.length > 0 ? (
                         conditions.map((condition, index) => (
                             <Grid2 key={index} size={{xs: 12, sm: 6, md: 3}}>
                             <Box key={index} sx={{

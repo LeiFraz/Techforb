@@ -1,37 +1,82 @@
-import { Box, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
+import { Box, Button, Menu, MenuItem, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useEffect, useState } from "react";
 import servicesAxios from "../../services/axios";
 import ModalCreatePlant from '../Modal/ModalCreatePlant'
+import ModalEditPlant from "../Modal/ModalEditPlant";
 
 const CardPlants = () => {
 
-    const [datos, setDatos] = useState('')
-    
-    const [isOpen, setIsOpen] = useState(false);
+    const [datos, setDatos] = useState([])
+    const [action, setAction] = useState(false)
+    const [datosPlantEdit, setDatosPlantEdit] = useState({id: '', nombre: ''})
 
+    const [isOpen, setIsOpen] = useState(false);
+    const [options, setOptions] = useState(false)
+    const [edit, setEdit] = useState(false)
+
+    const [plantId, setPlantId] = useState(false);
+
+    //crear planta
     const openModal = () => setIsOpen(true);
     const closeModal = () => setIsOpen(false);
+
+    //editar planta
+    const openEdit = () => setEdit(true);
+    const closeEdit = () => setEdit(false);
+
+    //abrir opciones editar/eliminar
+    const openOptions = (event, id_Plants) => {
+        setOptions(event.currentTarget);
+        setPlantId(id_Plants)
+    }
+    const closeOptions = () => {
+        setOptions(false)
+        setPlantId(false)
+    }
+
+    const editPlant = async(id, nombre, pais) => {
+        try {
+            // console.log(id, nombre, pais)
+            setDatosPlantEdit({id: id, nombre: nombre, pais: pais})
+            openEdit()
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const deletePlant = async(id) => {
+        try {
+            console.log(id)
+            
+            const response = await servicesAxios.deletePlant(id)
+            
+            if (response) {
+                alert('se elimino la planta exitosamente')
+                setAction(!action)
+            }
+        } catch (error) {
+            console.error(error)
+        }
+    }
 
     useEffect(()=> {
 
         const obtenerPlantas = async() => {
             try {
                 const response = await servicesAxios.plants();
-
                 setDatos(response)
-
             } catch (error) {
                 console.error(error)
             }
         }
 
         obtenerPlantas();
-    }, [])
+    }, [action])
     return (
         <>
-            <ModalCreatePlant isOpen={isOpen} onClose={closeModal} >
-            <Button onClick={closeModal} sx={{
+            <ModalCreatePlant isOpen={isOpen} setIsOpen={setIsOpen} setAction={setAction} action={action} onClose={closeModal} >
+                <Button onClick={closeModal} sx={{
                     border: '1px solid #33A3AA',
                     borderRadius: '5px',
                     width: '100px',
@@ -47,8 +92,28 @@ const CardPlants = () => {
                         }}>
                             Cancelar
                         </Typography>
-                    </Button>
+                </Button>
             </ModalCreatePlant>
+
+            <ModalEditPlant edit={edit} setEdit={setEdit} setAction={setAction} action={action} plant={datosPlantEdit}>
+                <Button onClick={closeEdit} sx={{
+                    border: '1px solid #33A3AA',
+                    borderRadius: '5px',
+                    width: '100px',
+                    height: '36px',
+                    backgroundColor: '#FFFFFF',
+                    mr: '20px'
+                    }}>
+                        <Typography sx={{
+                            fontFamily: 'Poppins, sans-serif',
+                            fontSize: '14px',
+                            fontWeight: '500',
+                            color: '#33A3AA',
+                        }}>
+                            Cancelar
+                        </Typography>
+                </Button>
+            </ModalEditPlant>
             
             <Box sx={{
                 width: {xs: '320px', sm: '500px' , md: '600px', lg: 'calc(1440px - 80px)'},
@@ -145,10 +210,32 @@ const CardPlants = () => {
                                             {dato.alertas_rojas}
                                         </TableCell>
                                         <TableCell sx={{fontSize: '12px', fontWeight: '400', fontFamily: 'Poppins, sans-serif', color: '#000000'}} align="right">
-                                            <MoreVertIcon sx={{
-                                                width: '12.05px',
-                                                color: '#425662'
-                                            }}/>
+                                            
+                                            <Button
+                                                id="basic-button"
+                                                aria-controls={options ? 'basic-menu' : undefined}
+                                                aria-haspopup="true"
+                                                aria-expanded={options && plantId === dato.id_Plantas? 'true' : undefined}
+                                                onClick={(e) => openOptions(e,dato.id_Plantas)}
+                                            >
+                                                <MoreVertIcon sx={{
+                                                    width: '12.05px',
+                                                    color: '#425662'
+                                                }}/>
+                                            </Button>
+                                            <Menu
+                                                id="basic-menu"
+                                                anchorEl={options}
+                                                open={plantId === dato.id_Plantas}
+                                                onClose={closeOptions}
+                                                MenuListProps={{
+                                                'aria-labelledby': 'basic-button',
+                                                }}
+                                            >  
+                                                <MenuItem onClick={()=>{closeOptions(); editPlant(dato.id_Plantas, dato.nombre, dato.pais)}}>Editar</MenuItem>
+                                                <MenuItem onClick={()=>deletePlant(dato.id_Plantas)}>Eliminar</MenuItem>
+                                            </Menu>
+
                                         </TableCell>
                                     </TableRow>
                                  ))

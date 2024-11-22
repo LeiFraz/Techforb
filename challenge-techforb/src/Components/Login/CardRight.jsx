@@ -9,6 +9,8 @@ const CardRight = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [form, setForm] = useState({correo: '', contrasenia: ''})
     const navigate = useNavigate()
+    const emailER = /[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*@[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*[.][a-zA-Z]{2,5}/
+    const passwordER = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/
 
     const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -28,19 +30,35 @@ const CardRight = () => {
     const login = async() => 
     {
         try {
-            const response = await servicesAxios.login({
-                correo: form.correo,
-                contrasenia: form.contrasenia
-            })
+            const emailValid = emailER.test(form.correo)
+            const correoValid = passwordER.test(form.contrasenia)
 
-            if(response)
+            if (emailValid && correoValid)
             {
-                localStorage.setItem('token', response.token)
-                localStorage.setItem('nombre', response.data.nombre)
-                
-                console.log('Inicio de sesion exitoso')
-
-                navigate('/dashboard')
+                const response = await servicesAxios.login({
+                    correo: form.correo,
+                    contrasenia: form.contrasenia
+                })
+    
+                if(response)
+                {
+                    localStorage.setItem('token', response.token)
+                    localStorage.setItem('nombre', response.data.nombre)
+                    
+                    console.log('Inicio de sesion exitoso')
+    
+                    navigate('/dashboard')
+                }
+            }else{
+                let msgEmail = ''
+                let msgContrasenia = ''
+                if (!emailValid) {
+                    msgEmail = 'Email invalido.\n\n'
+                }
+                if (!correoValid) {
+                    msgContrasenia = 'Contraseña invalida: Debe contener como minimo 8 caracteres, entre ellos 1 letra y 1 numero'
+                }
+                alert(`${msgEmail? msgEmail: ''}${msgContrasenia? msgContrasenia: ''}`)
             }
 
         } catch (error) {

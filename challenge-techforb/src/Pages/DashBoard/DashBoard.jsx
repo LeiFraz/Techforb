@@ -5,8 +5,31 @@ import LeftMenu from "../../Components/DashBoard/LeftMenu"
 import NavBar from "../../Components/DashBoard/NavBar"
 
 import { Box } from '@mui/material'
+import { useEffect, useState } from "react"
+import { useNavigate } from 'react-router-dom';
 
 const DashBoard = () => {
+    const [token, setToken] = useState(localStorage.getItem('token'))
+    const navigate = useNavigate();
+
+    const pageRegister = () => navigate('/')
+
+    useEffect(() => {
+        const isLogout = () => {
+            try {
+                const tokenLocal = localStorage.getItem('token')
+                if (!tokenLocal){
+                    setToken(null)
+                    pageRegister()
+                }
+            } catch (error) {
+                console.error(error)
+            }
+        }
+
+        setInterval(isLogout, 500)
+        
+    },[])
 
     return(
         <>

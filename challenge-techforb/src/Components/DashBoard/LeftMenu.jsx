@@ -5,9 +5,19 @@ import SensorsIcon from '@mui/icons-material/Sensors'
 import Monitoreo from '../../assets/DashBoard/Monitoreo_por_planta.png'
 import Historico from '../../assets/DashBoard/Historico_de_plantas.png'
 import Logo from '../../assets/DashBoard/Logo.png'
-
+import { useNavigate } from 'react-router-dom'
 
 const LeftMenu = () => {
+    const navigate = useNavigate()
+
+    const logout = () => {
+        try {
+            localStorage.clear()
+            navigate('/')
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
     return (
         <>
@@ -57,7 +67,7 @@ const LeftMenu = () => {
                         width: '20px',
                         height: '20px',
                     }}/>
-                    <LogoutIcon sx={{ 
+                    <LogoutIcon onClick={logout} sx={{ 
                         width: '20px',
                         height: '20px',
                         color: '#C1C1C1', 

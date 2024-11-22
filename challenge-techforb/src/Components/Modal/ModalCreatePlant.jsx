@@ -3,7 +3,7 @@ import './ModalCreatePlants.css'
 import {useEffect, useState } from "react";
 import servicesAxios from "../../services/axios";
 
-const ModalCreatePlant = ({ isOpen, children }) => {
+const ModalCreatePlant = ({ isOpen, setIsOpen, setAction, action, children }) => {
 
     const [form, setForm] = useState({nombre: '', pais: ''})
     const [paises, setPaises] = useState([])
@@ -38,8 +38,10 @@ const ModalCreatePlant = ({ isOpen, children }) => {
         
                     if(response)
                     {   
-                        console.log('Se creo la planta exitoso')
-    
+                        console.log('Se creo la planta exitosamente')
+                        alert('se creo la planta exitosamente')
+                        setIsOpen(!isOpen)
+                        setAction(!action)
                     }
                 }
     

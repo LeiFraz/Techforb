@@ -9,11 +9,11 @@ export const Routes = () => {
     const routes = [
         {
             path: '/',
-            element: <Login/>
+            element: <Register/>
         },
         {
-            path: '/registro',
-            element: <Register/>
+            path: '/login',
+            element: <Login/>
         },
         {
             path: '/dashboard',
